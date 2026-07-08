@@ -73,19 +73,19 @@ export function BreathingScreen({ onBack, onHome, theme, toggleTheme }: Breathin
       osc.connect(gain);
       gain.connect(ctx.destination);
 
-      osc.type = 'sine';
-      osc.frequency.setValueAtTime(500, ctx.currentTime); // мягкий, приятный тон
+      osc.type = 'sine'; // синусоида - самый мягкий, без резких обертонов
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // нота До (C5) - мягкий тон
 
       const now = ctx.currentTime;
       if (newPhase === 'inhale') {
-        // Плавное нарастание громкости на вдохе: 0 -> 0.3 за 4 секунды
+        // Плавное нарастание громкости на вдохе: 0 -> 0.2 за 4 секунды
         gain.gain.setValueAtTime(0, now);
-        gain.gain.linearRampToValueAtTime(0.3, now + 4);
+        gain.gain.linearRampToValueAtTime(0.2, now + 4);
         osc.start(now);
         osc.stop(now + 4);
       } else {
-        // Плавное затухание на выдохе: 0.3 -> 0 за 8 секунд
-        gain.gain.setValueAtTime(0.3, now);
+        // Плавное затухание на выдохе: 0.2 -> 0 за 8 секунд
+        gain.gain.setValueAtTime(0.2, now);
         gain.gain.linearRampToValueAtTime(0, now + 8);
         osc.start(now);
         osc.stop(now + 8);

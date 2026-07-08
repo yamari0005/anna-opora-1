@@ -11,12 +11,15 @@ interface MuscleRelaxationScreenProps {
   toggleTheme: () => void;
 }
 
+// Каждый шаг описывает только участок тела. Формулировка действия
+// (Напрягите/Сожмите/Расслабьте) вычисляется динамически из текущей фазы,
+// чтобы подпись никогда не могла разойтись с фазой и цветом круга.
 const STEPS = [
-  { target: "кулаки", instructionLabel: "Сожмите кулаки" },
-  { target: "предплечья", instructionLabel: "Напрягите предплечья" },
-  { target: "плечи", instructionLabel: "Напрягите плечи" },
-  { target: "лицо", instructionLabel: "Напрягите лицо" },
-  { target: "всё тело", instructionLabel: "Напрягите всё тело" }
+  { target: "кулаки", tensionVerb: "Сожмите" },
+  { target: "предплечья", tensionVerb: "Напрягите" },
+  { target: "плечи", tensionVerb: "Напрягите" },
+  { target: "лицо", tensionVerb: "Напрягите" },
+  { target: "всё тело", tensionVerb: "Напрягите" }
 ];
 
 // Фаза шага хранится единым объектом, чтобы currentStep, isTension и timeLeft
@@ -74,7 +77,8 @@ export function MuscleRelaxationScreen({ onBack, onHome, theme, toggleTheme }: M
   const { stepIndex: currentStep, isTension, timeLeft } = phase;
   const step = STEPS[currentStep];
   const phaseLabel = isTension ? "Напряжение" : "Расслабление";
-  const actionText = isTension ? `Напрягите ${step.target}` : `Расслабьте ${step.target}`;
+  // Единая формула для обеих подписей — исключает любое расхождение текста и фазы
+  const actionText = isTension ? `${step.tensionVerb} ${step.target}` : `Расслабьте ${step.target}`;
   
   return (
     <div className="flex flex-col min-h-[100dvh] animate-float-in max-w-2xl mx-auto w-full p-6">
@@ -99,7 +103,7 @@ export function MuscleRelaxationScreen({ onBack, onHome, theme, toggleTheme }: M
         <div className="w-full max-w-sm">
           <div className="flex justify-between mb-2 text-sm text-muted-foreground">
             <span>Шаг {currentStep + 1} из {STEPS.length}</span>
-            <span>{step.instructionLabel}</span>
+            <span>{actionText}</span>
           </div>
           <div className="w-full bg-secondary h-2 rounded-full overflow-hidden">
             <div 

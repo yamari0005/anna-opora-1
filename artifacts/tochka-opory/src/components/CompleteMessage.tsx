@@ -34,7 +34,7 @@ export function CompleteMessage({ onBack, onHome, theme, toggleTheme }: Complete
           <div className="flex flex-col gap-3">
             <button
               onClick={onBack}
-              className="w-full py-3 px-4 rounded-xl font-medium border transition-colors bg-white text-slate-700 border-[#cbd5e1] hover:bg-slate-50 dark:bg-[#1e293b] dark:text-[#e2e8f0] dark:border-[#475569] dark:hover:bg-[#28374a]"
+              className="w-full py-3 px-4 rounded-xl font-medium border-2 transition-colors bg-white text-slate-700 border-[#cbd5e1] hover:bg-[#f8fafc] dark:bg-[#1e293b] dark:text-[#e2e8f0] dark:border-[#475569] dark:hover:bg-[#28374a]"
             >
               ← К списку техник
             </button>

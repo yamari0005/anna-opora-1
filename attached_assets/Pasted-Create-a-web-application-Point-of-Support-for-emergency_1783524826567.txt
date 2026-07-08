@@ -1,0 +1,109 @@
+Create a web application "Точка опоры" (Point of Support) for emergency psychological self-help.
+
+CONCEPT:
+A clean, safe space for clients of psychologist Anna. No ads, no pop-ups, no premium offers. Only calming help during anxiety or panic attacks.
+
+CRITICAL REQUIREMENTS:
+1. LANGUAGE: ALL interface (buttons, headers, placeholders, toasts, errors) MUST be in Russian language
+2. DESIGN: Calming, minimalist. Mobile-first (perfect for phones)
+3. TECHNOLOGIES: React, Tailwind CSS, Lucide React (icons). CSS animations for smoothness. No backend - everything on localStorage.
+4. CLEAN SPACE: No ads, no premium offers, no pop-ups.
+
+SCREEN STRUCTURE:
+
+[SCREEN 1: MAIN PAGE]
+- Top left corner: Title "Точка опоры" (small, not large)
+- Under title: Subtitle "Стабилизация состояния при тревоге и стрессе" (small text)
+- Center: Greeting text: "Здравствуйте! Это Анна, ваш психолог. Если вам сейчас тяжело, давайте вместе найдём точку опоры и стабилизируем состояние."
+- Center below greeting: Large round button "МНЕ ПЛОХО" (rose-500 color, pulsing animation, size: 200x200px - NOT too big)
+- Bottom: Small statistics text: "Вы обращались к Точке опоры [X] раз за последние 7 дней" (data from localStorage)
+- Top right corner: Theme toggle button (sun/moon icon) for switching light/dark theme. Save choice in localStorage.
+- On click "МНЕ ПЛОХО" → smooth transition to Screen 2
+
+[SCREEN 2: TECHNIQUE SELECTION]
+- Header: "Выберите технику"
+- Back button "← Назад" in top left (returns to main page)
+- Theme toggle in top right
+- Four elegant cards (Card components) with Lucide icons:
+  1. Icon: Eye. Title: "Билатеральная стимуляция". Description: "Следите глазами за точкой для стабилизации"
+  2. Icon: Compass. Title: "Заземление 5-4-3-2-1". Description: "Переключите внимание на окружающий мир"
+  3. Icon: Wind. Title: "Дыхание 4-7-8". Description: "Успокойте дыхание за 60 секунд"
+  4. Icon: Activity. Title: "Прогрессивная релаксация". Description: "Снимите мышечное напряжение"
+- On card click → full-screen technique mode with "← Назад" and "Завершить" buttons
+
+[SCREEN 3: TECHNIQUES]
+
+TECHNIQUE 1: Bilateral Stimulation
+- Background: dark (#1e293b)
+- Center: Glowing dot (circle 30px, color #60a5fa)
+- Animation: Dot smoothly moves horizontally from left edge to right and back. Cycle = 2 seconds (CSS keyframes)
+- Bottom text: "Следите глазами за точкой. Не двигайте головой. Дышите ровно."
+- Countdown timer: 60 seconds
+- "Завершить" button in top right (keep original style - NOT darkened)
+- After clicking "Завершить": Message "Вы справились! Вы нашли точку опоры. Если состояние не улучшилось, обратитесь к психологу." + TWO buttons: "← К списку техник" and "На главную"
+- On complete: Increment usage counter in localStorage
+
+TECHNIQUE 2: Grounding 5-4-3-2-1
+- List of 5 steps with checkboxes:
+  1. Найдите 5 предметов одного цвета
+  2. Услышьте 4 разных звука
+  3. Потрогайте 3 разные текстуры
+  4. Уловите 2 запаха
+  5. Почувствуйте 1 вкус
+- Progress bar that fills as checkboxes are marked
+- "Завершить" button (always active, but highlighted at 100%) - DARKENED style (slate-500 #64748b), hover: slate-600 #475569
+- After complete: Message "Отлично! Вы вернулись в настоящий момент и нашли опору." + TWO buttons: "← К списку техник" and "На главную"
+- On complete: Increment usage counter in localStorage
+
+TECHNIQUE 3: Breathing 4-7-8
+- Center: Large circle
+- Animation cycle 19 seconds:
+  * 4 sec: Circle smoothly grows + text "Вдох"
+  * 7 sec: Circle stays still + text "Задержка"
+  * 8 sec: Circle smoothly shrinks + text "Выдох"
+- Bottom text: "Дышите через нос. Вдох на 4 счёта, задержка на 7, выдох на 8."
+- Countdown timer: 60 seconds
+- Top right: Sound toggle button (volume icon) - LOUDER sound (increase Web Audio API gain 3-4x)
+- "Завершить" button - DARKENED style (slate-500 #64748b), hover: slate-600 #475569
+- After complete: Message "Ваше тело успокоилось. Вы нашли внутреннюю точку опоры. Продолжайте дышать спокойно." + TWO buttons: "← К списку техник" and "На главную"
+- On complete: Increment usage counter in localStorage
+
+TECHNIQUE 4: Progressive Muscle Relaxation
+- Step-by-step instructions with timer for each step (5 sec tension + 10 sec relaxation):
+  1. "Сожмите кулаки" (5 sec → 10 sec)
+  2. "Напрягите предплечья" (5 sec → 10 sec)
+  3. "Напрягите плечи" (5 sec → 10 sec)
+  4. "Напрягите лицо" (5 sec → 10 sec)
+  5. "Напрягите всё тело" (5 sec → 10 sec)
+- Visual phase indicator: "Напряжение" (red circle) / "Расслабление" (green circle)
+- IMPORTANT: Text under circle MUST change based on phase:
+  * Red circle (tension phase): "Напрягите [body part]" (e.g., "Напрягите кулаки")
+  * Green circle (relaxation phase): "Расслабьте [body part]" (e.g., "Расслабьте кулаки")
+- Countdown timer for each step
+- "Завершить" button - DARKENED style (slate-500 #64748b), hover: slate-600 #475569
+- After complete: Message "Отлично! Ваше тело расслабилось. Вы нашли опору в своём теле." + TWO buttons: "← К списку техник" and "На главную"
+- On complete: Increment usage counter in localStorage
+
+[LOCALSTORAGE LOGIC]
+- Storage structure: { "techniqueName": [{ "date": "YYYY-MM-DD", "count": 1 }, ...], "theme": "dark" | "light", "soundEnabled": boolean }
+- On clicking "Завершить" in any technique → add record with current date
+- On Main screen → calculate sum of all records from last 7 days and display number instead of [X]
+- If no data → display 0
+- Theme and sound saved between sessions
+
+[THEME TOGGLE]
+- Dark theme (default): Background #0f172a (dark blue, NOT black), text white, accents blue (#60a5fa) and green (#10b981)
+- Light theme: Background #e2e8f0 (soft gray-blue, NOT white), cards white (#ffffff) with soft shadow, text #1e293b (dark gray)
+- Toggle icon in top right corner of ALL screens (main, selection, each technique, completion)
+- Smooth transition between themes
+- Save choice in localStorage
+
+[GENERAL UI REQUIREMENTS]
+- Transitions between screens: smooth (fade-in / slide-up)
+- "← Назад" button on each technique screen returns to selection screen
+- All states (loading, errors, empty screens) must have correct Russian messages
+- App must look perfect on mobile devices
+- No external dependencies except React, Tailwind, Lucide
+- Code must be clean, component-based, with Russian comments
+
+Generate full working code ready to run.

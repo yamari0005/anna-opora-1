@@ -1,0 +1,4 @@
+{
+  "buildCommand": "npm run build -- --noEmit",
+  "installCommand": "npm install"
+}

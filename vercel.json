@@ -1,4 +1,14 @@
 {
-  "buildCommand": "npm run build -- --noEmit",
-  "installCommand": "npm install"
+  "builds": [
+    {
+      "src": "artifacts/api-server/src/app.ts",
+      "use": "@vercel/node"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "artifacts/api-server/src/app.ts"
+    }
+  ]
 }
